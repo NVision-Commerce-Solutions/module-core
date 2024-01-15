@@ -3,9 +3,12 @@
 namespace Commerce365\Core\Block\Adminhtml\Edit\Tab;
 
 use Commerce365\Core\Block\Adminhtml\CustomerAttributeList;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 class CustomerAttributes extends Generic implements TabInterface
@@ -13,9 +16,9 @@ class CustomerAttributes extends Generic implements TabInterface
     protected $_coreRegistry;
 
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -72,7 +75,7 @@ class CustomerAttributes extends Generic implements TabInterface
      *
      * @return string
      */
-    public function getTabUrl()
+    public function getTabUrl(): string
     {
         return '';
     }
@@ -81,12 +84,12 @@ class CustomerAttributes extends Generic implements TabInterface
      *
      * @return bool
      */
-    public function isAjaxLoaded()
+    public function isAjaxLoaded(): bool
     {
         return false;
     }
 
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         if ($this->canShowTab()) {
             return $this->getFormHtml();
@@ -95,7 +98,7 @@ class CustomerAttributes extends Generic implements TabInterface
         return '';
     }
 
-    public function getFormHtml()
+    public function getFormHtml(): string
     {
         return $this->getLayout()
           ->createBlock(CustomerAttributeList::class)

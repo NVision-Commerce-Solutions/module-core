@@ -42,19 +42,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="logging" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="0" showInStore="0">
-                <label>Logging</label>
-                <field id="log_level" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="1">
-                    <label>Log Level</label>
-                    <source_model>Commerce365\Core\Model\Config\Source\LogLevel</source_model>
-                </field>
-                <field id="test_logging" translate="label comment" type="button" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <frontend_model>Commerce365\Core\Block\Adminhtml\System\Config\Buttons\TestLogging</frontend_model>
-                    <label><![CDATA[Test]]></label>
-                    <comment><![CDATA[Use this button to check if the logging mechanism is working correctly.]]></comment>
-                </field>
-
-            </group>
             <group id="version" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Version</label>
                 <group id="coreversion" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1"

@@ -26,7 +26,7 @@ class CheckConnection extends Field
         return $this->getUrl('commerce365_configuration/connection/check');
     }
 
-    public function getButtonHtml()
+    public function getButtonHtml(): string
     {
         $data = [
             'id'    => 'checkconnection_button',

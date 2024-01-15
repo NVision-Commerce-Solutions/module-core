@@ -1,6 +1,6 @@
 {
     "name": "commerce365/module-core",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "Commerce 365 for Magento - Core functionality used by all our Magento 2 extensions",
     "homepage": "https://n.vision/products/commerce-365-for-magento/",
     "license": [

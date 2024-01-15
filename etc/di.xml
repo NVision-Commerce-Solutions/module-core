@@ -1,25 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Commerce365\Core\Logger\Error">
-        <arguments>
-            <argument name="fileName" xsi:type="string">var/log/commerce365_error.log</argument>
-        </arguments>
-    </type>
-    <type name="Commerce365\Core\Logger\Debug">
-        <arguments>
-            <argument name="fileName" xsi:type="string">var/log/commerce365.log</argument>
-        </arguments>
-    </type>
-    <type name="Commerce365\Core\Logger\Logger">
-        <arguments>
-            <argument name="name" xsi:type="string">C365Logger</argument>
-            <argument name="handlers" xsi:type="array">
-                <item name="error" xsi:type="object">Commerce365\Core\Logger\Error</item>
-                <item name="debug" xsi:type="object">Commerce365\Core\Logger\Debug</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Commerce365\Core\Service\Customer\ParentResolveCustomerSession">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>

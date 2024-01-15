@@ -3,6 +3,7 @@
 namespace Commerce365\Core\Block\Adminhtml;
 
 use Commerce365\Core\Service\Customer\GetParentCustomer;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Url;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -17,7 +18,7 @@ class CustomerAttributeList extends \Magento\Backend\Block\Template
     private Url $urlBuilder;
 
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        Context $context,
         CustomerInterfaceFactory $customerDataFactory,
         DataObjectHelper $dataObjectHelper,
         GetParentCustomer $getParentCustomer,
@@ -156,7 +157,7 @@ class CustomerAttributeList extends \Magento\Backend\Block\Template
         return '';
     }
 
-    public function getBcCustomerBlocked()
+    public function getBcCustomerBlocked(): string
     {
         $customer = $this->getCustomer();
         if (!$customer->getCustomAttribute('bc_blocked_code')) {
@@ -179,7 +180,7 @@ class CustomerAttributeList extends \Magento\Backend\Block\Template
         }
     }
 
-    public function getParentCustomerUrl()
+    public function getParentCustomerUrl(): ?string
     {
         $parent = $this->getParentCustomer->execute($this->getCustomer());
         if ($parent->getId() === $this->getCustomer()->getId()) {
@@ -189,7 +190,7 @@ class CustomerAttributeList extends \Magento\Backend\Block\Template
         return $this->urlBuilder->getUrl('*/*/edit', ['id' => $parent->getId()]);
     }
 
-    public function getParentCustomerEmail()
+    public function getParentCustomerEmail(): string
     {
         $parent = $this->getParentCustomer->execute($this->getCustomer());
         if ($parent->getId() === $this->getCustomer()->getId()) {

@@ -135,9 +135,11 @@ class AbstractList extends Template
         return $this->getUrl(static::URL, $urlQuery);
     }
 
-    public function getSortIcon($column)
+    public function getSortIcon($column): string
     {
-        if ($column !== $this->getSortColumn()) {
+        $sortColumn = $this->getSortColumn() ?? 'Document Date';
+
+        if ($column !== $sortColumn) {
             return '';
         }
 

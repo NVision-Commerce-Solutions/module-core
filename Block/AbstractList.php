@@ -145,4 +145,9 @@ class AbstractList extends Template
 
         return $this->getSortDirection() === 'ASC' ? '▼' : '▲';
     }
+
+    public function isColumnExists($data, $columnName)
+    {
+        return isset($data[0][$columnName]);
+    }
 }

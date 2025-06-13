@@ -26,9 +26,8 @@ class AbstractList extends Template
     {
         $query = $this->addPaginationToQuery($query);
         $query = $this->addSortingToQuery($query);
-        $query = $this->addSearchToQuery($query);
 
-        return $query;
+        return $this->addSearchToQuery($query);
     }
 
     public function getPage()
@@ -41,7 +40,7 @@ class AbstractList extends Template
         return $this->getRequest()->getParam('pageSize') ?? SalesDocumentInterface::DEFAULT_PAGE_SIZE;
     }
 
-    public function getPreviousPageUrl()
+    public function getPreviousPageUrl(): string
     {
         $urlQuery = ['page' => $this->getPage() - 1];
         $urlQuery = $this->addSearchToQuery($urlQuery);
@@ -50,7 +49,7 @@ class AbstractList extends Template
         return $this->getUrl(static::URL, $urlQuery);
     }
 
-    public function getNextPageUrl()
+    public function getNextPageUrl(): string
     {
         $urlQuery = ['page' => $this->getPage() + 1];
         $urlQuery = $this->addSearchToQuery($urlQuery);
@@ -123,7 +122,7 @@ class AbstractList extends Template
         return $query;
     }
 
-    public function getSortLink($column)
+    public function getSortLink($column): string
     {
         $direction = 'ASC';
         if ($this->getSortColumn() === $column && $this->getSortDirection() === 'ASC') {
@@ -146,7 +145,7 @@ class AbstractList extends Template
         return $this->getSortDirection() === 'ASC' ? '▼' : '▲';
     }
 
-    public function isColumnExists($data, $columnName)
+    public function isColumnExists($data, $columnName): bool
     {
         return isset($data[0][$columnName]);
     }

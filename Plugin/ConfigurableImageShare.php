@@ -25,9 +25,9 @@ class ConfigurableImageShare
      */
     public function beforeCreate(
         ImageBuilder $subject,
-        Product $product = null,
-        string $imageId = null,
-        array $attributes = null
+        ?Product $product = null,
+        ?string $imageId = null,
+        ?array $attributes = null
     ): array {
         if (!$this->mainConfig->isConfigurableImageEnabled()) {
             return [$product, $imageId, $attributes];

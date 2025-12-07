@@ -40,7 +40,7 @@ class ParentResolveCustomerSession extends Session
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
         GetParentCustomer $getParentCustomer,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         parent::__construct(
             $request,

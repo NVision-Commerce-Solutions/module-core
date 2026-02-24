@@ -6,7 +6,7 @@ namespace Commerce365\Core\Plugin;
 
 use Commerce365\Core\Model\MainConfig;
 use Commerce365\Core\Service\Product\GetParentProduct;
-use Magento\Catalog\Block\Product\ImageBuilder;
+use Magento\Catalog\Block\Product\ImageFactory;
 use Magento\Catalog\Model\Product;
 
 class ConfigurableImageShare
@@ -17,23 +17,23 @@ class ConfigurableImageShare
     ) {}
 
     /**
-     * @param ImageBuilder $subject
-     * @param Product|null $product
-     * @param string|null $imageId
+     * @param ImageFactory $subject
+     * @param Product $product
+     * @param string $imageId
      * @param array|null $attributes
      * @return array
      */
     public function beforeCreate(
-        ImageBuilder $subject,
-        ?Product $product = null,
-        ?string $imageId = null,
+        ImageFactory $subject,
+        Product $product,
+        string $imageId,
         ?array $attributes = null
     ): array {
         if (!$this->mainConfig->isConfigurableImageEnabled()) {
             return [$product, $imageId, $attributes];
         }
 
-        if (!$product || $product->getTypeId() !== 'simple') {
+        if ($product->getTypeId() !== 'simple') {
             return [$product, $imageId, $attributes];
         }
 

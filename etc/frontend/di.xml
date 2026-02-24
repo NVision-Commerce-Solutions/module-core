@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Catalog\Block\Product\ImageBuilder">
-        <plugin name="commerce365_configurable_image" type="Commerce365\Core\Plugin\ConfigurableImageShare" sortOrder="10"/>
+    <type name="Magento\Catalog\Block\Product\ImageFactory">
+        <plugin name="commerce365_configurable_image" type="Commerce365\Core\Plugin\ConfigurableImageShare"
+            sortOrder="10"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="commerce365_configurable_gallery_images_share"
-                type="Commerce365\Core\Plugin\ConfigurableGalleryImagesShare"/>
+            type="Commerce365\Core\Plugin\ConfigurableGalleryImagesShare"/>
     </type>
     <type name="Magento\Catalog\Helper\Image">
         <plugin name="commerce365_configurable_image_helper_share"
-                type="Commerce365\Core\Plugin\ConfigurableImageHelperShare"/>
+            type="Commerce365\Core\Plugin\ConfigurableImageHelperShare"/>
     </type>
 </config>

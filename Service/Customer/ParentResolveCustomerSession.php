@@ -42,6 +42,7 @@ class ParentResolveCustomerSession extends Session
         GetParentCustomer $getParentCustomer,
         ?AccountConfirmation $accountConfirmation = null
     ) {
+        $this->getParentCustomer = $getParentCustomer;
         parent::__construct(
             $request,
             $sidResolver,
@@ -66,7 +67,6 @@ class ParentResolveCustomerSession extends Session
             $response,
             $accountConfirmation
         );
-        $this->getParentCustomer = $getParentCustomer;
     }
 
     public function getCustomer()

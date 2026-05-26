@@ -10,8 +10,18 @@ class Logger
 {
     public function __construct(private readonly LoggerInterface $logger) {}
 
-    public function error(string $message)
+    public function error(string $message): void
     {
         $this->logger->error($message);
+    }
+
+    public function info(string $message): void
+    {
+        $this->logger->info($message);
+    }
+
+    public function warning(string $message): void
+    {
+        $this->logger->warning($message);
     }
 }

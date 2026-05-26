@@ -25,6 +25,11 @@ class ProcessResponse
         $status = $response->getStatusCode();
         if ($status >= 200 && $status < 300) {
             $responseData = $this->serializer->unserialize($response->getBody()->getContents());
+            if (!isset($responseData['value'])) {
+                return [];
+            }
+
+            // BC OData wraps the actual JSON payload in the "value" field.
             $responseData = $this->serializer->unserialize($responseData['value']);
         }
 

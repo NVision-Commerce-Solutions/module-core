@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Commerce365\Core\Service;
 
 interface SalesDocumentInterface

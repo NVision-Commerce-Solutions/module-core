@@ -24,7 +24,6 @@ class GetClient
 
         return new Client([
             'base_uri' => $hubUrl . 'api/',
-            'verify' => false,
             'allow_redirects' => true,
             'http_errors' => false,
             'headers' => [

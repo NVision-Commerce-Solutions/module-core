@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Commerce365\Core\Service\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\Config\Share;
@@ -69,19 +70,22 @@ class ParentResolveCustomerSession extends Session
         );
     }
 
-    public function getCustomer()
+    public function getCustomer(): CustomerInterface
     {
         $customer = parent::getCustomer();
 
         return $this->getParentCustomer->execute($customer->getDataModel());
     }
 
-    public function getCustomerId(): ?string
+    public function getCustomerId(): int|string|null
     {
-        $customer = parent::getCustomerId();
+        $customerId = parent::getCustomerId();
+        if ($customerId === null) {
+            return null;
+        }
 
-        return $this->getParentCustomer->getByCustomerId($customer) ?
-            $this->getParentCustomer->getByCustomerId($customer)->getId() :
-            null;
+        $parentCustomer = $this->getParentCustomer->getByCustomerId($customerId);
+
+        return $parentCustomer?->getId() ?? $customerId;
     }
 }

@@ -14,7 +14,7 @@ class PrepareSalesRequestQuery
         private readonly ParentResolveCustomerSession $customerSession
     ) {}
 
-    public function execute(array $query)
+    public function execute(array $query): array
     {
         $query['customerId'] = $this->customerSession->getCustomer()->getId();
 

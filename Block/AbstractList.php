@@ -30,14 +30,14 @@ class AbstractList extends Template
         return $this->addSearchToQuery($query);
     }
 
-    public function getPage()
+    public function getPage(): int
     {
-        return $this->getRequest()->getParam('page') ?? 1;
+        return (int) ($this->getRequest()->getParam('page') ?? 1);
     }
 
-    public function getPageSize()
+    public function getPageSize(): int
     {
-        return $this->getRequest()->getParam('pageSize') ?? SalesDocumentInterface::DEFAULT_PAGE_SIZE;
+        return (int) ($this->getRequest()->getParam('pageSize') ?? SalesDocumentInterface::DEFAULT_PAGE_SIZE);
     }
 
     public function getPreviousPageUrl(): string

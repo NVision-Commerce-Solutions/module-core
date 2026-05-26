@@ -13,7 +13,7 @@ class GetSalesDocument
         private readonly PrepareSalesRequestQuery $prepareSalesRequestQuery
     ) {}
 
-    public function execute(array $query)
+    public function execute(array $query): array
     {
         $query = $this->prepareSalesRequestQuery->execute($query);
 

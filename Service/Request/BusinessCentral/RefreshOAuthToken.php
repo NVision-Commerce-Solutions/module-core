@@ -63,7 +63,6 @@ class RefreshOAuthToken
         ];
 
         $client = new Client([
-            'verify' => false,
             'allow_redirects' => true,
             'http_errors' => false,
             'headers' => [

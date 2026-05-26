@@ -8,7 +8,7 @@ class GetParentCustomerId
 {
     public function __construct(private readonly GetParentCustomer $getParentCustomer) {}
 
-    public function execute($customerId)
+    public function execute(int|string $customerId): int|string
     {
         $parentCustomer = $this->getParentCustomer->getByCustomerId($customerId);
 

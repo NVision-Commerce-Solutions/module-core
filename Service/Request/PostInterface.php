@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Commerce365\Core\Service\Request;
 
 interface PostInterface
@@ -9,5 +11,5 @@ interface PostInterface
      * @param array $postData
      * @return array
      */
-    public function execute($method, array $postData = []): array;
+    public function execute(string $method, array $postData = []): array;
 }

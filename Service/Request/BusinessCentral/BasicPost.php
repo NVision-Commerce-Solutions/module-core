@@ -11,6 +11,7 @@ use Commerce365\Core\Service\Response\BusinessCentral\ProcessResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 class BasicPost implements PostInterface
 {
@@ -21,7 +22,7 @@ class BasicPost implements PostInterface
         private readonly Logger $logger
     ) {}
 
-    public function execute($method, $postData = []): array
+    public function execute(string $method, array $postData = []): array
     {
         $endpointUrl = $this->getBCEndpointUrl->execute($method);
         if (!$endpointUrl) {
@@ -36,8 +37,10 @@ class BasicPost implements PostInterface
 
         try {
             $response = $this->makeCall($endpointUrl, $postData);
-        } catch (GuzzleException|ClientException $exception) {
-            $this->logger->error($exception->getMessage());
+        } catch (GuzzleException $exception) {
+            $this->logger->error(
+                sprintf('BC API request failed for %s: HTTP %d', $method, $this->getStatusCode($exception))
+            );
             return [];
         }
 
@@ -47,7 +50,7 @@ class BasicPost implements PostInterface
     /**
      * @throws GuzzleException
      */
-    private function makeCall($endpointUrl, $postData)
+    private function makeCall(string $endpointUrl, array $postData): ResponseInterface|array
     {
         $client = new Client([
             'headers' => [
@@ -59,7 +62,9 @@ class BasicPost implements PostInterface
         try {
             return $client->post($endpointUrl, $postData);
         } catch (ClientException $exception) {
-            $this->logger->error($exception->getMessage());
+            $this->logger->error(
+                sprintf('BC API request failed: HTTP %d', $this->getStatusCode($exception))
+            );
             return [];
         }
     }
@@ -73,5 +78,12 @@ class BasicPost implements PostInterface
         }
 
         return $jsonData;
+    }
+
+    private function getStatusCode(GuzzleException $exception): int
+    {
+        return $exception instanceof ClientException && $exception->hasResponse()
+            ? $exception->getResponse()->getStatusCode()
+            : (int) $exception->getCode();
     }
 }

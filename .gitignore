@@ -43,3 +43,5 @@
 /var/package/*
 !/var/package/*.xml
 
+DEVELOPER.md
+PHP84_COMPLIANCE.md

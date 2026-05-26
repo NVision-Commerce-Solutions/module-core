@@ -11,6 +11,7 @@ use Commerce365\Core\Service\Response\BusinessCentral\ProcessResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 class OAuthPost implements PostInterface
 {
@@ -22,7 +23,7 @@ class OAuthPost implements PostInterface
         private readonly Logger $logger
     ) {}
 
-    public function execute($method, $postData = []): array
+    public function execute(string $method, array $postData = []): array
     {
         $endpointUrl = $this->getBCEndpointUrl->execute($method);
         if (!$endpointUrl) {
@@ -43,14 +44,16 @@ class OAuthPost implements PostInterface
 
             $response = $this->makeCall($endpointUrl, $token, $postData);
         } catch (GuzzleException $exception) {
-            $this->logger->error($exception->getMessage());
+            $this->logger->error(
+                sprintf('BC OAuth request failed for %s: HTTP %d', $method, $this->getStatusCode($exception))
+            );
             return [];
         }
 
         return $this->processResponse->execute($response);
     }
 
-    private function makeCall($endpointUrl, $token, $postData, $take = 1)
+    private function makeCall(string $endpointUrl, string $token, array $postData, int $take = 1): ResponseInterface|array
     {
         $client = new Client([
             'headers' => [
@@ -63,7 +66,9 @@ class OAuthPost implements PostInterface
         try {
             return $client->post($endpointUrl, $postData);
         } catch (ClientException $exception) {
-            $this->logger->error($exception->getMessage());
+            $this->logger->error(
+                sprintf('BC OAuth request failed: HTTP %d', $this->getStatusCode($exception))
+            );
             if ($take !== 2 && $exception->getCode() === 401) {
                 $token = $this->refreshOAuthToken->execute();
                 return $this->makeCall($endpointUrl, $token, $postData, 2);
@@ -82,5 +87,12 @@ class OAuthPost implements PostInterface
         }
 
         return $jsonData;
+    }
+
+    private function getStatusCode(GuzzleException $exception): int
+    {
+        return $exception instanceof ClientException && $exception->hasResponse()
+            ? $exception->getResponse()->getStatusCode()
+            : (int) $exception->getCode();
     }
 }

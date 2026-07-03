@@ -14,13 +14,13 @@ class PrepareSalesRequestQuery
         private readonly ParentResolveCustomerSession $customerSession
     ) {}
 
-    public function execute(array $query)
+    public function execute(array $query, ?int $storeId = null)
     {
         $query['customerId'] = $this->customerSession->getCustomer()->getId();
 
         //config returns 0 or 1, but we need false or true for our querystring parameter
         $query['webOrdersOnly'] = true;
-        if ($this->mainConfig->getIncludeNonWebOrders()) {
+        if ($this->mainConfig->getIncludeNonWebOrders($storeId)) {
             $query['webOrdersOnly'] = false;
         }
 

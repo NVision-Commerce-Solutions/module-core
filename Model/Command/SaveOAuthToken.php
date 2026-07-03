@@ -10,11 +10,14 @@ class SaveOAuthToken
 {
     public function __construct(private readonly ResourceConnection $resourceConnection) {}
 
-    public function execute($token): void
+    public function execute($token, string $configHash): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('commerce365_oauth_token');
-        $connection->truncateTable($tableName);
-        $connection->insert($tableName, ['token' => $token]);
+        $connection->insertOnDuplicate(
+            $tableName,
+            ['config_hash' => $configHash, 'token' => $token],
+            ['token']
+        );
     }
 }

@@ -10,13 +10,15 @@ class GetSalesDocuments
 {
     public function __construct(
         private readonly Get $get,
-        private readonly PrepareSalesRequestQuery $prepareSalesRequestQuery
+        private readonly PrepareSalesRequestQuery $prepareSalesRequestQuery,
+        private readonly CurrentStore $currentStore
     ) {}
 
     public function execute(array $query)
     {
-        $query = $this->prepareSalesRequestQuery->execute($query);
+        $storeId = $this->currentStore->getId();
+        $query = $this->prepareSalesRequestQuery->execute($query, $storeId);
 
-        return $this->get->execute('v2/SalesDocumentHistory/GetList', $query);
+        return $this->get->execute('v2/SalesDocumentHistory/GetList', $query, $storeId);
     }
 }

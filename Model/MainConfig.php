@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Commerce365\Core\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class MainConfig
 {
@@ -17,38 +18,45 @@ class MainConfig
 
     public function __construct(private readonly ScopeConfigInterface $scopeConfig) {}
 
-    public function getIncludeNonWebOrders()
+    public function getIncludeNonWebOrders($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_NONWEB_ORDERS, 'store');
+        return $this->getConfigValue(self::XML_PATH_NONWEB_ORDERS, $storeId);
     }
 
-    public function getHubUrl()
+    public function getHubUrl($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_HUB_URL, 'website');
+        return $this->getConfigValue(self::XML_PATH_HUB_URL, $storeId);
     }
 
-    public function getHubAppId()
+    public function getHubAppId($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_HUB_APPID, 'website');
+        return $this->getConfigValue(self::XML_PATH_HUB_APPID, $storeId);
     }
 
-    public function getHubSecretKey()
+    public function getHubSecretKey($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_HUB_SECRETKEY, 'website');
+        return $this->getConfigValue(self::XML_PATH_HUB_SECRETKEY, $storeId);
     }
 
-    public function isConfigurableImageEnabled()
+    public function isConfigurableImageEnabled($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_CONFIGURABLE_IMAGE_ENABLED, 'website');
+        return $this->getConfigValue(self::XML_PATH_CONFIGURABLE_IMAGE_ENABLED, $storeId);
     }
 
-    public function isConfigurableImageReplaceExisting()
+    public function isConfigurableImageReplaceExisting($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_CONFIGURABLE_IMAGE_REPLACE, 'website');
+        return $this->getConfigValue(self::XML_PATH_CONFIGURABLE_IMAGE_REPLACE, $storeId);
     }
 
-    public function getConfigValue($path, $scope)
+    /**
+     * Reads at store scope so values fall back store view -> website -> default.
+     */
+    public function getConfigValue($path, $storeId = null)
     {
-        return $this->scopeConfig->getValue('commerce365config_general/' . $path, $scope);
+        return $this->scopeConfig->getValue(
+            'commerce365config_general/' . $path,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }

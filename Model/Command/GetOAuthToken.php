@@ -10,12 +10,15 @@ class GetOAuthToken
 {
     public function __construct(private readonly ResourceConnection $resourceConnection) {}
 
-    public function execute(): string
+    public function execute(string $configHash): string
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('commerce365_oauth_token');
-        $select = $connection->select()->from($tableName, ['token'])->limit(1);
+        $select = $connection->select()
+            ->from($tableName, ['token'])
+            ->where('config_hash = ?', $configHash)
+            ->limit(1);
 
-        return $connection->fetchOne($select);
+        return (string) $connection->fetchOne($select);
     }
 }

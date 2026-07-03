@@ -2,6 +2,10 @@
 
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="commerce365_oauth_token" resource="default" engine="innodb" comment="Commerce365 OAuth Table">
+        <column xsi:type="varchar" name="config_hash" length="64" nullable="false" default="" comment="BC Instance Config Hash"/>
         <column xsi:type="text" name="token"  nullable="false" comment="Token"/>
+        <constraint xsi:type="unique" referenceId="COMMERCE365_OAUTH_TOKEN_CONFIG_HASH">
+            <column name="config_hash"/>
+        </constraint>
     </table>
 </schema>

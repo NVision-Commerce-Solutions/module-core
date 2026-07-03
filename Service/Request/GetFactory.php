@@ -16,13 +16,13 @@ class GetFactory
         private readonly AdvancedConfig $advancedConfig
     ) {}
 
-    public function create(): PostInterface
+    public function create(?int $storeId = null): PostInterface
     {
-        if ($this->advancedConfig->isBCOAuth()) {
+        if ($this->advancedConfig->isBCOAuth($storeId)) {
             return $this->objectManager->create(OAuthPost::class);
         }
 
-        if ($this->advancedConfig->isBCBasic()) {
+        if ($this->advancedConfig->isBCBasic($storeId)) {
             return $this->objectManager->create(BasicPost::class);
         }
 

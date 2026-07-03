@@ -21,15 +21,15 @@ class BasicPost implements PostInterface
         private readonly Logger $logger
     ) {}
 
-    public function execute($method, $postData = []): array
+    public function execute($method, $postData = [], ?int $storeId = null): array
     {
-        $endpointUrl = $this->getBCEndpointUrl->execute($method);
+        $endpointUrl = $this->getBCEndpointUrl->execute($method, $storeId);
         if (!$endpointUrl) {
             return [];
         }
 
-        $username = $this->advancedConfig->getUsername();
-        $password = $this->advancedConfig->getPassword();
+        $username = $this->advancedConfig->getUsername($storeId);
+        $password = $this->advancedConfig->getPassword($storeId);
 
         $postData['json'] = $this->processJsonParams($postData['json']);
         $postData['auth'] = [$username, $password];

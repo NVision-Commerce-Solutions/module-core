@@ -3,6 +3,7 @@
 namespace Commerce365\Core\Controller\Adminhtml\Connection;
 
 use Commerce365\Core\Model\MainConfig;
+use Commerce365\Core\Service\Config\ScopeResolver;
 use Commerce365\Core\Service\Request\Post;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -12,26 +13,30 @@ class Check extends Action
 {
     private Post $post;
     private MainConfig $mainConfig;
+    private ScopeResolver $scopeResolver;
 
     public function __construct(
         Post $post,
         Context $context,
         MainConfig $mainConfig,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        ScopeResolver $scopeResolver
     ) {
         parent::__construct($context);
         $this->post = $post;
         $this->mainConfig = $mainConfig;
         $this->messageManager = $messageManager;
+        $this->scopeResolver = $scopeResolver;
     }
 
     public function execute()
     {
-        $apiUrl = $this->mainConfig->getHubUrl();
-        $appId = $this->mainConfig->getHubAppId();
-        $secretKey = $this->mainConfig->getHubSecretKey();
+        $storeId = $this->scopeResolver->getStoreId();
+        $apiUrl = $this->mainConfig->getHubUrl($storeId);
+        $appId = $this->mainConfig->getHubAppId($storeId);
+        $secretKey = $this->mainConfig->getHubSecretKey($storeId);
 
-        if ($apiUrl === '' || $appId === '' || $secretKey === '') {
+        if (!$apiUrl || !$appId || !$secretKey) {
             $this->messageManager->addErrorMessage(__('First fill in all of the above fields!'));
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRefererUrl());
         }
@@ -42,7 +47,8 @@ class Check extends Action
                 ['json' => [
                     'AppId' => $appId,
                     'SecretKey' => $secretKey
-                ]]
+                ]],
+                $storeId
             );
 
             $apiConnectionStatusCode = $body["bcApiStatusCode"] ?? 500;

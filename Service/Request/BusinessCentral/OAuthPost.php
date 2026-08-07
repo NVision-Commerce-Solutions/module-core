@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Commerce365\Core\Service\Request\BusinessCentral;
 
+use Commerce365\Core\Model\AdvancedConfig;
 use Commerce365\Core\Model\Command\GetOAuthToken;
 use Commerce365\Core\Service\Logger;
 use Commerce365\Core\Service\Request\PostInterface;
@@ -19,12 +20,13 @@ class OAuthPost implements PostInterface
         private readonly RefreshOAuthToken $refreshOAuthToken,
         private readonly GetOAuthToken $getOAuthToken,
         private readonly GetBCEndpointUrl $getBCEndpointUrl,
+        private readonly AdvancedConfig $advancedConfig,
         private readonly Logger $logger
     ) {}
 
-    public function execute($method, $postData = []): array
+    public function execute($method, $postData = [], ?int $storeId = null): array
     {
-        $endpointUrl = $this->getBCEndpointUrl->execute($method);
+        $endpointUrl = $this->getBCEndpointUrl->execute($method, $storeId);
         if (!$endpointUrl) {
             return [];
         }
@@ -32,16 +34,17 @@ class OAuthPost implements PostInterface
         $postData['json'] = $this->processJsonParams($postData['json']);
 
         try {
-            $token = $this->getOAuthToken->execute();
+            $configHash = $this->advancedConfig->getInstanceHash($storeId);
+            $token = $this->getOAuthToken->execute($configHash);
             if (!$token) {
-                $token = $this->refreshOAuthToken->execute();
+                $token = $this->refreshOAuthToken->execute($storeId);
             }
 
             if (!$token) {
                 return [];
             }
 
-            $response = $this->makeCall($endpointUrl, $token, $postData);
+            $response = $this->makeCall($endpointUrl, $token, $postData, $storeId);
         } catch (GuzzleException $exception) {
             $this->logger->error($exception->getMessage());
             return [];
@@ -50,7 +53,7 @@ class OAuthPost implements PostInterface
         return $this->processResponse->execute($response);
     }
 
-    private function makeCall($endpointUrl, $token, $postData, $take = 1)
+    private function makeCall($endpointUrl, $token, $postData, ?int $storeId = null, $take = 1)
     {
         $client = new Client([
             'headers' => [
@@ -65,8 +68,8 @@ class OAuthPost implements PostInterface
         } catch (ClientException $exception) {
             $this->logger->error($exception->getMessage());
             if ($take !== 2 && $exception->getCode() === 401) {
-                $token = $this->refreshOAuthToken->execute();
-                return $this->makeCall($endpointUrl, $token, $postData, 2);
+                $token = $this->refreshOAuthToken->execute($storeId);
+                return $this->makeCall($endpointUrl, $token, $postData, $storeId, 2);
             }
 
             return [];

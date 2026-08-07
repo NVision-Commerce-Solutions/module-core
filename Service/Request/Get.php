@@ -17,9 +17,9 @@ class Get
     /**
      * @throws GuzzleException
      */
-    public function execute($endpoint, $query): array
+    public function execute($endpoint, $query, ?int $storeId = null): array
     {
-        $client = $this->getClient->execute();
+        $client = $this->getClient->execute($storeId);
 
         if (!$client) {
             return [];

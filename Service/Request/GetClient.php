@@ -11,11 +11,11 @@ class GetClient
 {
     public function __construct(private readonly MainConfig $mainConfig) {}
 
-    public function execute(): ?Client
+    public function execute(?int $storeId = null): ?Client
     {
-        $hubUrl = $this->mainConfig->getHubUrl();
-        $hubAppId = $this->mainConfig->getHubAppId();
-        $hubSecretKey = $this->mainConfig->getHubSecretKey();
+        $hubUrl = $this->mainConfig->getHubUrl($storeId);
+        $hubAppId = $this->mainConfig->getHubAppId($storeId);
+        $hubSecretKey = $this->mainConfig->getHubSecretKey($storeId);
         if (!$hubAppId || !$hubUrl || !$hubSecretKey) {
             return null;
         }

@@ -23,9 +23,9 @@ class RefreshOAuthToken
      * @throws GuzzleException
      * @throws RuntimeException
      */
-    public function execute(): string
+    public function execute(?int $storeId = null): string
     {
-        $response = $this->sendRequest();
+        $response = $this->sendRequest($storeId);
         if ($response->getStatusCode() !== 200) {
             $errorMessage = 'Error code: ' . $response->getStatusCode() . ' Reason: ' . $response->getReasonPhrase();
             throw new RuntimeException(__($errorMessage));
@@ -36,7 +36,7 @@ class RefreshOAuthToken
             throw new RuntimeException(__('Token is empty'));
         }
 
-        $this->saveOAuthToken->execute($tokenData['access_token']);
+        $this->saveOAuthToken->execute($tokenData['access_token'], $this->advancedConfig->getInstanceHash($storeId));
 
         return $tokenData['access_token'];
     }
@@ -45,11 +45,11 @@ class RefreshOAuthToken
      * @throws GuzzleException
      * @throws RuntimeException
      */
-    private function sendRequest(): \Psr\Http\Message\ResponseInterface
+    private function sendRequest(?int $storeId = null): \Psr\Http\Message\ResponseInterface
     {
-        $tenantId = $this->advancedConfig->getTenantId();
-        $clientId = $this->advancedConfig->getClientId();
-        $clientSecret = $this->advancedConfig->getClientSecret();
+        $tenantId = $this->advancedConfig->getTenantId($storeId);
+        $clientId = $this->advancedConfig->getClientId($storeId);
+        $clientSecret = $this->advancedConfig->getClientSecret($storeId);
         if (!$tenantId || !$clientId || !$clientSecret) {
             throw new RuntimeException(__('Please make sure to fill up all BC credentials in configuration'));
         }

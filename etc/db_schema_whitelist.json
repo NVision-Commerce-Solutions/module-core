@@ -1,7 +1,11 @@
 {
     "commerce365_oauth_token": {
         "column": {
-            "token": true
+            "token": true,
+            "config_hash": true
+        },
+        "constraint": {
+            "COMMERCE365_OAUTH_TOKEN_CONFIG_HASH": true
         }
     }
 }

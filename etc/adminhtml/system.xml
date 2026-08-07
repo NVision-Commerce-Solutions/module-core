@@ -10,18 +10,18 @@
             <label>General</label>
             <tab>Commerce365Config</tab>
             <resource>Commerce365_Core::config</resource>
-            <group id="hub" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="hub" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Commerce 365 API</label>
-                <field id="hub_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="hub_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL</label>
                 </field>
-                <field id="hub_appid" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="hub_appid" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>App ID</label>
                 </field>
-                <field id="hub_secretkey" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="hub_secretkey" translate="label" type="password" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secret Key</label>
                 </field>
-                <field id="check_connection" translate="label comment" type="button" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="check_connection" translate="label comment" type="button" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Commerce365\Core\Block\Adminhtml\System\Config\Buttons\CheckConnection</frontend_model>
                     <label><![CDATA[Test]]></label>
                     <comment><![CDATA[Use this button to check the URL and credentials you have entered. Do not forget to save the configuration after a successful testing the connection.]]></comment>
@@ -78,14 +78,14 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[Enable this functionality only in combination with the corresponding Business Central and Azure authentication configurations.]]></comment>
                 </field>
-                <field id="auth_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="auth_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Authentication Type</label>
                     <source_model>Commerce365\Core\Model\Config\Source\AuthType</source_model>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="username" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="username" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Username</label>
                     <validate>required-entry</validate>
                     <depends>
@@ -93,7 +93,7 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="password" translate="label" type="password" sortOrder="16" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="password" translate="label" type="password" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
                     <validate>required-entry</validate>
                     <depends>
@@ -101,7 +101,7 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="tenant_id" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="tenant_id" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Microsoft Entra Tenant ID</label>
                     <validate>required-entry</validate>
                     <depends>
@@ -109,21 +109,21 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="environment" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="environment" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Environment</label>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="endpoint" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="endpoint" translate="label" type="text" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Webservice URL</label>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="client_id" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="client_id" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>OAuth Client Id</label>
                     <validate>required-entry</validate>
                     <depends>
@@ -131,7 +131,7 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="client_secret" translate="label" type="password" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="client_secret" translate="label" type="password" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>OAuth Client Secret</label>
                     <validate>required-entry</validate>
                     <depends>
@@ -139,14 +139,14 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="company" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="company" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Company Name</label>
                     <validate>required-entry</validate>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
                 </field>
-                <field id="check_connection" translate="label comment" type="button" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="check_connection" translate="label comment" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Commerce365\Core\Block\Adminhtml\System\Config\Buttons\BusinessCentral\OauthCheckConnection</frontend_model>
                     <label><![CDATA[Test]]></label>
                     <comment><![CDATA[Use this button to check the web service URL and credentials you have entered. Do not forget to save the configuration before testing the connection.]]></comment>

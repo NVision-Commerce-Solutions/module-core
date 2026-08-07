@@ -17,9 +17,9 @@ class Post implements PostInterface
     /**
      * @throws GuzzleException
      */
-    public function execute($method, $postData = []): array
+    public function execute($method, $postData = [], ?int $storeId = null): array
     {
-        $client = $this->getClient->execute();
+        $client = $this->getClient->execute($storeId);
 
         if (!$client) {
             return [];

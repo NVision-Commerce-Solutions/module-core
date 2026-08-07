@@ -25,68 +25,96 @@ class AdvancedConfig
 
     public function isBCOAuth($storeId = null): bool
     {
-        $isEnabled = $this->isSetConfigFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE, $storeId);
-        $type = $this->getConfigValue(self::XML_PATH_AUTH_TYPE);
+        $isEnabled = $this->isSetConfigFlag(self::XML_PATH_ENABLED, $storeId);
+        $type = $this->getConfigValue(self::XML_PATH_AUTH_TYPE, $storeId);
 
         return $type === AuthType::AUTH_TYPE_OAUTH && $isEnabled;
     }
 
     public function isBCBasic($storeId = null): bool
     {
-        $isEnabled = $this->isSetConfigFlag(self::XML_PATH_ENABLED, ScopeInterface::SCOPE_STORE, $storeId);
-        $type = $this->getConfigValue(self::XML_PATH_AUTH_TYPE);
+        $isEnabled = $this->isSetConfigFlag(self::XML_PATH_ENABLED, $storeId);
+        $type = $this->getConfigValue(self::XML_PATH_AUTH_TYPE, $storeId);
 
         return $type === AuthType::AUTH_TYPE_BASIC && $isEnabled;
     }
 
-    public function getTenantId()
+    public function getTenantId($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_TENANT_ID);
+        return $this->getConfigValue(self::XML_PATH_TENANT_ID, $storeId);
     }
 
-    public function getEnvironment()
+    public function getEnvironment($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_ENVIRONMENT);
+        return $this->getConfigValue(self::XML_PATH_ENVIRONMENT, $storeId);
     }
 
-    public function getClientId()
+    public function getClientId($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_CLIENT_ID);
+        return $this->getConfigValue(self::XML_PATH_CLIENT_ID, $storeId);
     }
 
-    public function getClientSecret()
+    public function getClientSecret($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_CLIENT_SECRET);
+        return $this->getConfigValue(self::XML_PATH_CLIENT_SECRET, $storeId);
     }
 
-    public function getEndpoint()
+    public function getEndpoint($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_ENDPOINT);
+        return $this->getConfigValue(self::XML_PATH_ENDPOINT, $storeId);
     }
 
-    public function getCompany()
+    public function getCompany($storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_COMPANY_NAME);
+        return $this->getConfigValue(self::XML_PATH_COMPANY_NAME, $storeId);
     }
 
-
-    public function getConfigValue($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $storeId = null)
+    public function getUsername($storeId = null)
     {
-        return $this->scopeConfig->getValue('commerce365config_advanced/' . $path, $scope, $storeId);
+        return $this->getConfigValue(self::XML_PATH_USERNAME, $storeId);
     }
 
-    public function isSetConfigFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $storeId = null): bool
+    public function getPassword($storeId = null)
     {
-        return $this->scopeConfig->isSetFlag('commerce365config_advanced/' . $path, $scope, $storeId);
+        return $this->getConfigValue(self::XML_PATH_PASSWORD, $storeId);
     }
 
-    public function getUsername()
+    /**
+     * Stable identifier for the BC instance a given scope resolves to.
+     *
+     * Used to key cached artefacts (e.g. OAuth tokens) per instance so that
+     * scopes pointing at different Business Central environments never share
+     * credentials, while scopes resolving to the same instance reuse them.
+     */
+    public function getInstanceHash($storeId = null): string
     {
-        return $this->getConfigValue(self::XML_PATH_USERNAME);
+        return sha1(implode('|', [
+            (string) $this->getTenantId($storeId),
+            (string) $this->getClientId($storeId),
+            (string) $this->getEnvironment($storeId),
+            (string) $this->getEndpoint($storeId),
+            (string) $this->getCompany($storeId),
+        ]));
     }
 
-    public function getPassword()
+    /**
+     * Reads at store scope so values fall back store view -> website -> default.
+     */
+    public function getConfigValue($path, $storeId = null)
     {
-        return $this->getConfigValue(self::XML_PATH_PASSWORD);
+        return $this->scopeConfig->getValue(
+            'commerce365config_advanced/' . $path,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    public function isSetConfigFlag($path, $storeId = null): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            'commerce365config_advanced/' . $path,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 }

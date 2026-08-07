@@ -11,14 +11,14 @@ class GetBCEndpointUrl
 {
     public function __construct(private readonly AdvancedConfig $advancedConfig) {}
 
-    public function execute(string $method): string
+    public function execute(string $method, ?int $storeId = null): string
     {
-        $endpoint = $this->advancedConfig->getEndpoint();
-        $environment = $this->advancedConfig->getEnvironment();
-        $company = $this->advancedConfig->getCompany();
+        $endpoint = $this->advancedConfig->getEndpoint($storeId);
+        $environment = $this->advancedConfig->getEnvironment($storeId);
+        $company = $this->advancedConfig->getCompany($storeId);
 
-        if ($this->advancedConfig->isBCOAuth()) {
-            $tenantId = $this->advancedConfig->getTenantId();
+        if ($this->advancedConfig->isBCOAuth($storeId)) {
+            $tenantId = $this->advancedConfig->getTenantId($storeId);
             if (!$tenantId) {
                 throw new LocalizedException(__('Tenant Id should be configured'));
             }
